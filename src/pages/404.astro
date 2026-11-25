@@ -1,0 +1,11 @@
+---
+import Site from '../layouts/Site.astro';
+import { route } from '../data/projects';
+---
+<Site title="页面未找到">
+  <section class="shell page-top not-found">
+    <h1>页面未找到</h1>
+    <p class="page-lead">可以回到作品目录继续浏览。</p>
+    <a class="button button-solid" href={route('work/')}>浏览作品</a>
+  </section>
+</Site>

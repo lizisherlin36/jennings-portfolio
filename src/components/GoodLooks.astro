@@ -1,0 +1,249 @@
+---
+import { goodLooksUrl, route } from '../data/projects';
+import { galleryCategories, goodLooksAlbums, goodLooksFeatured } from '../data/good-looks';
+import '../styles/good-looks.css';
+
+const { preview = false } = Astro.props;
+const albums = preview ? goodLooksFeatured : goodLooksAlbums;
+const files = route('media/good-looks/');
+const imageCount = goodLooksAlbums.reduce((sum, album) => sum + album.images.length, 0);
+const viewerAlbums = albums.map(({ id, title, original, images }) => ({ id, title, original, images: images.map(image => image.id) }));
+const posterSelections = new Map<number, number>();
+const posterColumns = [
+  [4, 13, 6, 1, 20, 16, 11, 9],
+  [1, 9, 12, 13, 3, 17, 4, 10],
+  [20, 3, 8, 4, 6, 12, 10, 1],
+  [6, 2, 20, 18, 9, 15, 4, 14],
+  [13, 7, 12, 1, 17, 3, 20, 10],
+].map(column => column.map(id => {
+  const album = goodLooksAlbums.find(item => item.id === id)!;
+  const next = posterSelections.get(id) ?? 0;
+  posterSelections.set(id, next + 1);
+  const poster = album.images[next % album.images.length];
+  return `${files}${id}/${poster.id}-small.webp`;
+}));
+---
+<div class:list={['lookbook', { 'lookbook-preview': preview }]} data-albums={JSON.stringify(viewerAlbums)} data-files={files}>
+  <div class:list={['lookbook-masthead', { 'lookbook-masthead--wall': !preview }]}>
+    {!preview && (
+      <div class="lookbook-wall" aria-hidden="true">
+        {posterColumns.map(column => (
+          <div class="lookbook-column">
+            <div class="lookbook-roll">
+              {[0, 1].map(() => (
+                <div class="lookbook-sequence">
+                  {column.map(poster => <img src={poster} alt="" loading="lazy" decoding="async" />)}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+    <div class:list={[{ 'lookbook-wall-copy': !preview }]}>
+      <div class="lookbook-intro">
+        <p class="fine-label">Jennings Li · 独立视觉创作</p>
+        <h2 lang="en">GOOD{preview ? <br /> : ' '}LOOKS<span>.</span></h2>
+        <p>从达喀尔赛车的尘土与速度，到汽车海报的留白和现代水墨。这里收录了我用 AI 探索画面、材质与排版的系列作品。</p>
+        <div class="lookbook-links">
+          <a class="lookbook-primary" href={preview ? route('work/?category=goodlooks') : '#looks-archive'}>{preview ? '浏览完整图集' : '浏览图集'}</a>
+          <a class="text-link" href={goodLooksUrl} target="_blank" rel="noopener noreferrer">小红书 · Good_Looks</a>
+        </div>
+      </div>
+      {!preview && <button class="lookbook-pause" type="button" data-look-pause hidden>暂停背景</button>}
+    </div>
+    {preview && <div class="lookbook-triptych">
+      {goodLooksFeatured.map(album => {
+        const cover = album.images[0];
+        const path = `${files}${album.id}/${cover.id}`;
+        return (
+          <button class="lookbook-feature" type="button" data-look-album={album.id} aria-label={`打开图集 · ${album.title}`}>
+            <img src={`${path}-small.webp`} srcset={`${path}-small.webp ${cover.smallWidth}w, ${path}.webp ${cover.width}w`} sizes="(max-width: 700px) 30vw, 18vw" width={cover.width} height={cover.height} alt="" loading="lazy" decoding="async" />
+          </button>
+        );
+      })}
+    </div>}
+  </div>
+
+  {!preview && (
+    <section class="lookbook-archive" id="looks-archive" aria-labelledby="lookbook-archive-title">
+      <div class="lookbook-archive-heading">
+        <h3 id="lookbook-archive-title">图集索引</h3>
+        <p role="status" data-look-count>{albums.length} 组图集 · {imageCount} 张作品</p>
+      </div>
+      <div class="lookbook-filters" aria-label="筛选图集">
+        <button type="button" data-look-filter="all" aria-pressed="true">全部</button>
+        {Object.entries(galleryCategories).map(([id, label]) => <button type="button" data-look-filter={id} aria-pressed="false">{label}</button>)}
+      </div>
+      <div class="lookbook-grid">
+        {albums.map(album => {
+          const cover = album.images[0];
+          const path = `${files}${album.id}/${cover.id}`;
+          return (
+            <article class="lookbook-card" data-look-category={album.category} data-look-size={album.images.length}>
+              <div class="lookbook-card-media" data-look-preview-album={album.id}>
+                <button class="lookbook-cover" type="button" data-look-album={album.id} aria-label={`打开图集 · ${album.title}，${album.images.length} 张`}>
+                  <img src={`${path}-small.webp`} srcset={`${path}-small.webp ${cover.smallWidth}w, ${path}.webp ${cover.width}w`} sizes="(max-width: 670px) 45vw, (max-width: 1000px) 31vw, 23vw" width={cover.width} height={cover.height} alt="" loading="lazy" decoding="async" />
+                  <img class="lookbook-preview-frame" alt="" decoding="async" />
+                  <img class="lookbook-preview-frame" alt="" decoding="async" />
+                  <span class="lookbook-frame-count" data-look-preview-count aria-hidden="true">{album.images.length} 张</span>
+                </button>
+                <button class="lookbook-preview-toggle" data-look-preview-toggle type="button" aria-pressed="false" aria-label={`快速预览 · ${album.title}`} hidden>预览</button>
+              </div>
+              <div class="lookbook-caption">
+                <p class="fine-label">{galleryCategories[album.category]}</p>
+                <h3>{album.title}</h3>
+                {album.original && <a class="text-link" href={album.original} target="_blank" rel="noopener noreferrer">小红书原笔记</a>}
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  )}
+
+  <dialog class="lookbook-viewer" aria-label="图集浏览器">
+    <div class="lookbook-toolbar">
+      <div><h2 data-look-title></h2><p data-look-position role="status"></p></div>
+      <button type="button" data-look-close autofocus>关闭 <span aria-hidden="true">×</span></button>
+    </div>
+    <div class="lookbook-stage">
+      <button type="button" data-look-step="-1" aria-label="上一张">‹</button>
+      <img data-look-image alt="" decoding="async" />
+      <button type="button" data-look-step="1" aria-label="下一张">›</button>
+    </div>
+    <div class="lookbook-thumbs" aria-label="选择图片"></div>
+    <div class="lookbook-viewer-footer"><a class="text-link" data-look-original href={goodLooksUrl} target="_blank" rel="noopener noreferrer">小红书原笔记</a></div>
+  </dialog>
+</div>
+
+<script>
+  import { setupLookbookPreviews } from '../scripts/lookbook-previews';
+
+  for (const root of document.querySelectorAll<HTMLElement>('.lookbook')) {
+    const masthead = root.querySelector<HTMLElement>('.lookbook-masthead--wall');
+    const pauseButton = masthead?.querySelector<HTMLButtonElement>('[data-look-pause]');
+    if (masthead && pauseButton) {
+      const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+      let visible = false;
+      let paused = false;
+
+      function updateMotion() {
+        masthead!.classList.toggle('is-moving', visible && !paused && !document.hidden && !reducedMotion.matches);
+        pauseButton!.hidden = reducedMotion.matches;
+        pauseButton!.textContent = paused ? '播放背景' : '暂停背景';
+      }
+
+      pauseButton.addEventListener('click', () => {
+        paused = !paused;
+        updateMotion();
+      });
+      new IntersectionObserver(([entry]) => {
+        visible = entry.intersectionRatio >= .08;
+        updateMotion();
+      }, { threshold: .08 }).observe(masthead);
+      document.addEventListener('visibilitychange', updateMotion);
+      reducedMotion.addEventListener('change', updateMotion);
+      updateMotion();
+    }
+
+    const albums = JSON.parse(root.dataset.albums!) as { id: number; title: string; original?: string; images: number[] }[];
+    const viewer = root.querySelector<HTMLDialogElement>('.lookbook-viewer')!;
+    const stage = viewer.querySelector<HTMLElement>('.lookbook-stage')!;
+    const image = viewer.querySelector<HTMLImageElement>('[data-look-image]')!;
+    const title = viewer.querySelector<HTMLElement>('[data-look-title]')!;
+    const status = viewer.querySelector<HTMLElement>('[data-look-position]')!;
+    const source = viewer.querySelector<HTMLAnchorElement>('[data-look-original]')!;
+    const rail = viewer.querySelector<HTMLElement>('.lookbook-thumbs')!;
+    const file = (albumId: number, imageId: number, suffix = '') => `${root.dataset.files}${albumId}/${imageId}${suffix}.webp`;
+    const previews = setupLookbookPreviews(root, albums, (albumId, imageId) => file(albumId, imageId, '-small'));
+    let album = albums[0];
+    let index = 0;
+    let press: { id: number; x: number; y: number } | undefined;
+
+    function show(next: number) {
+      index = (next + album.images.length) % album.images.length;
+      image.src = file(album.id, album.images[index]);
+      image.alt = `${album.title}，第 ${index + 1} 张`;
+      status.textContent = `${index + 1} / ${album.images.length}`;
+      for (const [i, thumb] of Array.from(rail.querySelectorAll('button')).entries()) {
+        thumb.setAttribute('aria-current', i === index ? 'true' : 'false');
+        if (i !== index) continue;
+        if (thumb.offsetLeft < rail.scrollLeft || thumb.offsetLeft + thumb.offsetWidth > rail.scrollLeft + rail.clientWidth) {
+          rail.scrollLeft = thumb.offsetLeft - (rail.clientWidth - thumb.offsetWidth) / 2;
+        }
+      }
+    }
+
+    function open(picked: typeof album) {
+      const initialIndex = previews.currentIndex(picked.id);
+      previews.stop();
+      album = picked;
+      title.textContent = album.title;
+      source.hidden = !album.original;
+      if (album.original) source.href = album.original;
+      rail.replaceChildren(...album.images.map((id, i) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.setAttribute('aria-label', `查看第 ${i + 1} 张`);
+        const thumb = document.createElement('img');
+        thumb.src = file(album.id, id, '-small');
+        thumb.loading = 'lazy';
+        thumb.alt = '';
+        button.append(thumb);
+        button.addEventListener('click', () => show(i));
+        return button;
+      }));
+      viewer.showModal();
+      rail.scrollLeft = 0;
+      show(initialIndex);
+    }
+
+    root.querySelectorAll<HTMLButtonElement>('[data-look-album]').forEach(button => {
+      button.addEventListener('click', () => {
+        const picked = albums.find(item => item.id === Number(button.dataset.lookAlbum));
+        if (picked) open(picked);
+      });
+    });
+    viewer.querySelector('[data-look-close]')!.addEventListener('click', () => viewer.close());
+    viewer.querySelectorAll<HTMLButtonElement>('[data-look-step]').forEach(button => {
+      button.addEventListener('click', () => show(index + Number(button.dataset.lookStep)));
+    });
+    viewer.addEventListener('keydown', event => {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      if (event.altKey || event.ctrlKey || event.metaKey) return;
+      event.preventDefault();
+      show(index + (event.key === 'ArrowRight' ? 1 : -1));
+    });
+    stage.addEventListener('pointerdown', event => {
+      if (event.pointerType !== 'touch') return;
+      press = { id: event.pointerId, x: event.clientX, y: event.clientY };
+    });
+    stage.addEventListener('pointercancel', () => { press = undefined; });
+    stage.addEventListener('pointerup', event => {
+      if (!press || press.id !== event.pointerId) return;
+      const dx = event.clientX - press.x;
+      const dy = event.clientY - press.y;
+      press = undefined;
+      if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.5) show(index + (dx < 0 ? 1 : -1));
+    });
+    viewer.addEventListener('close', () => {
+      if (viewer.open) return;
+      press = undefined;
+      image.removeAttribute('src');
+      rail.replaceChildren();
+    });
+
+    const filters = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-look-filter]'));
+    const cards = Array.from(root.querySelectorAll<HTMLElement>('[data-look-category]'));
+    filters.forEach(filter => filter.addEventListener('click', () => {
+      previews.stop();
+      filters.forEach(button => button.setAttribute('aria-pressed', String(button === filter)));
+      const category = filter.dataset.lookFilter;
+      for (const card of cards) card.hidden = category !== 'all' && card.dataset.lookCategory !== category;
+      const visible = cards.filter(card => !card.hidden);
+      const count = visible.reduce((sum, card) => sum + Number(card.dataset.lookSize), 0);
+      root.querySelector('[data-look-count]')!.textContent = `${visible.length} 组图集 · ${count} 张作品`;
+    }));
+  }
+</script>

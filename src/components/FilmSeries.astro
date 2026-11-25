@@ -1,0 +1,24 @@
+---
+import type { Episode } from '../data/projects';
+import Film from './Film.astro';
+
+const { series } = Astro.props as {
+  series: { id: string; title: string; summary: string; episodes: Episode[] }[];
+};
+---
+<nav class="case-series-index" aria-label="专题索引">
+  {series.map(group => <a href={`#series-${group.id}`}>{group.title}<span>{group.episodes.length} 支</span></a>)}
+</nav>
+<div class="case-series-list">
+  {series.map(group => (
+    <section class="case-series" id={`series-${group.id}`} aria-labelledby={`series-title-${group.id}`}>
+      <div class="case-series-heading">
+        <h2 id={`series-title-${group.id}`}>{group.title}</h2>
+        <p>{group.summary}</p>
+      </div>
+      <div class="series-grid" data-count={group.episodes.length}>
+        {group.episodes.map(episode => <Film episode={episode} />)}
+      </div>
+    </section>
+  ))}
+</div>

@@ -1,0 +1,128 @@
+---
+import { route } from '../data/projects';
+import '../styles/hero-reel.css';
+
+const { mode } = Astro.props as { mode: 'home' | 'lab' };
+const home = mode === 'home';
+const geography = { key: 'mariana', title: '马里亚纳海沟', slug: 'geography-motion', clip: '地理', palette: 'ocean', position: '53% 50%' };
+const annual = { key: 'annual', title: '美团餐饮系统年度视频', slug: 'meituan-brand-films', clip: '品牌', palette: 'amber', position: '63% 50%' };
+const cars = { key: 'auto1', title: '中国车企出海', slug: 'china-auto-global', clip: '汽车', palette: 'jade', position: '60% 50%' };
+const technology = { key: 'fsd1', title: 'FSD V15 解析', slug: 'technology-motion', clip: '科技', palette: 'violet', position: '60% 50%' };
+const slides = home ? [annual, geography, cars, technology] : [geography, cars, technology];
+const projectLink = (slide: typeof geography) => route(`work/${slide.slug}/`);
+const mediaLink = (slide: typeof geography, extension: string) => route(`media/reels/${slide.key}-hero.${extension}`);
+---
+<section class:list={['hero-reel', `hero-reel--${mode}`]} data-palette={slides[0].palette} aria-labelledby="reel-title">
+  <div class="reel-layers" aria-hidden="true">
+    {slides.map((slide, index) => (
+      <video
+        class:list={['reel-layer', { 'is-current': index === 0 }]}
+        style={`--shot-position:${slide.position}`}
+        tabindex="-1"
+        poster={mediaLink(slide, 'webp')}
+        data-src={mediaLink(slide, 'mp4')}
+        muted playsinline preload="none"></video>
+    ))}
+  </div>
+  <div class="reel-scrim"></div>
+  <div class="shell hero-reel-layout">
+    <div class="hero-reel-copy">
+      <p class="fine-label">{home ? 'Jennings Li · 个人作品集' : '独立创作 · 动态影像'}</p>
+      {home ? <h1 id="reel-title" lang="en">Stories in<br /><em>Motion.</em></h1> : <h1 id="reel-title" lang="en">AI <em>Lab.</em></h1>}
+      <p class="reel-subtitle">{home ? '商业影像 · 品牌视觉 · AI 创作' : '用动态影像讲述地理、汽车与科技。'}</p>
+      <a class="reel-button" href={home ? '#portfolio' : '#ai-work'}>{home ? '浏览作品集' : '查看 AI 作品'}</a>
+    </div>
+    <div class="reel-control" aria-label="视频轮播">
+      <p class="fine-label">精选片段</p>
+      <a class="reel-current" href={projectLink(slides[0])}>{slides[0].title}</a>
+      <div class="reel-controls">
+        <div class="reel-picker" aria-label="选择片段">
+          {slides.map((slide, index) => (
+            <button type="button" aria-pressed={index === 0 ? 'true' : 'false'} data-palette={slide.palette} data-title={slide.title} data-href={projectLink(slide)}>{slide.clip}</button>
+          ))}
+        </div>
+        <button type="button" class="reel-toggle" aria-label="播放轮播"><span aria-hidden="true">▶</span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import $ from 'jquery';
+
+  for (const stage of document.querySelectorAll<HTMLElement>('.hero-reel')) {
+    const videos = [...stage.querySelectorAll<HTMLVideoElement>('.reel-layer')];
+    const selectors = [...stage.querySelectorAll<HTMLButtonElement>('.reel-picker button')];
+    const toggle = stage.querySelector<HTMLButtonElement>('.reel-toggle')!;
+    const currentLink = stage.querySelector<HTMLAnchorElement>('.reel-current')!;
+    const themeColor = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')!;
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+    let running = !reducedMotion.matches;
+    let onScreen = false;
+    let index = 0;
+
+    function load(video: HTMLVideoElement) {
+      if (video.hasAttribute('src')) return;
+      video.muted = true;
+      video.preload = 'auto';
+      video.src = video.dataset.src!;
+    }
+
+    function sync() {
+      const video = videos[index];
+      toggle.setAttribute('aria-label', running ? '暂停轮播' : '播放轮播');
+      toggle.firstElementChild!.textContent = running ? 'Ⅱ' : '▶';
+      if (!running || !onScreen || document.hidden) {
+        video.pause();
+        return;
+      }
+      load(video);
+      video.play().catch(error => {
+        if (error.name === 'AbortError' || video !== videos[index]) return;
+        running = false;
+        sync();
+      });
+    }
+
+    function select(next: number) {
+      if (next === index) return;
+      videos[index].pause();
+      index = next;
+      const { palette, href, title } = selectors[index].dataset;
+      stage.dataset.palette = palette;
+      document.body.dataset.reelPalette = palette;
+      themeColor.content = getComputedStyle(stage).getPropertyValue('--reel-base').trim();
+      currentLink.href = href!;
+      currentLink.textContent = title!;
+      for (const [i, video] of videos.entries()) {
+        video.classList.toggle('is-current', i === index);
+        selectors[i].setAttribute('aria-pressed', String(i === index));
+      }
+      if (videos[index].readyState > 0) videos[index].currentTime = 0;
+      sync();
+    }
+
+    selectors.forEach((button, i) => $(button).on('click', () => select(i)));
+    $(toggle).on('click', () => {
+      running = !running;
+      sync();
+    });
+    for (const [i, video] of videos.entries()) {
+      const next = (i + 1) % videos.length;
+      $(video).on('timeupdate', () => {
+        if (i === index && running && video.currentTime > 3.5) load(videos[next]);
+      });
+      $(video).on('ended', () => {
+        if (i === index && running) select(next);
+      });
+    }
+    reducedMotion.addEventListener('change', () => {
+      if (reducedMotion.matches) { running = false; sync(); }
+    });
+    document.addEventListener('visibilitychange', sync);
+    new IntersectionObserver(([entry]) => {
+      onScreen = entry.intersectionRatio >= .15;
+      sync();
+    }, { threshold: .15 }).observe(stage);
+  }
+</script>

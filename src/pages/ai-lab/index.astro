@@ -1,0 +1,24 @@
+---
+import Site from '../../layouts/Site.astro';
+import HeroReel from '../../components/HeroReel.astro';
+import WorkCard from '../../components/WorkCard.astro';
+import { projects, route } from '../../data/projects';
+
+const work = projects.filter(project => project.category === 'motion');
+---
+<Site theme="cinema-lab" overlayHeader title="AI Lab" section="lab" image={route('media/reels/mariana-hero.webp')}>
+  <HeroReel mode="lab" />
+  <section class="shell section-space" id="ai-work">
+    <div class="case-subhead"><h2>已制作的作品</h2></div>
+    <div class="catalog-grid">{work.map(project => <WorkCard project={project} />)}</div>
+  </section>
+  <section class="shell lab-methods">
+    <div class="case-subhead"><h2>创作方法与探索</h2></div>
+    <div class="method-folds">
+      <details><summary>AI 辅助视频制作</summary><p>在《中国车企出海》中运用 ChatGPT 与 Claude 辅助创作。</p><a class="text-link" href={route('work/china-auto-global/')}>查看系列</a></details>
+      <details><summary>动态图解</summary><p>用画面呈现海沟深度和船闸工作的顺序。</p><a class="text-link" href={route('work/geography-motion/')}>查看科普短片</a></details>
+      <details><summary>生成式视觉与创意编程</summary><p>持续探索生成式摄影、视觉重建、Three.js 和 Remotion。</p><a class="text-link" href={route('experiments/')}>体验在线实验</a></details>
+      <details><summary>这座作品网站</summary><p>这也是我的 AI 协作作品。从整理素材、设计封面到编排视频轮播，我用 Codex 把商业案例和个人实验做成了可以直接浏览、播放的作品集。</p><a class="text-link" href={route()}>体验首页</a></details>
+    </div>
+  </section>
+</Site>

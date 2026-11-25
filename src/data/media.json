@@ -1,0 +1,379 @@
+{
+  "annual": {
+    "file": "covers/annual.jpg",
+    "small": "covers/annual-small.jpg",
+    "width": 1440,
+    "height": 810,
+    "video": "annual.mp4",
+    "videoWidth": 1280,
+    "videoHeight": 720,
+    "seconds": 36,
+    "excerpt": true,
+    "smallWidth": 640
+  },
+  "bbq": {
+    "file": "covers/bbq.jpg",
+    "small": "covers/bbq-small.jpg",
+    "width": 1440,
+    "height": 810,
+    "video": "bbq.mp4",
+    "videoWidth": 540,
+    "videoHeight": 960,
+    "seconds": 30,
+    "excerpt": true,
+    "smallWidth": 640
+  },
+  "ruyi": {
+    "file": "covers/ruyi.jpg",
+    "small": "covers/ruyi-small.jpg",
+    "width": 1440,
+    "height": 810,
+    "video": "ruyi.mp4",
+    "videoWidth": 1280,
+    "videoHeight": 720,
+    "seconds": 28,
+    "excerpt": true,
+    "smallWidth": 640
+  },
+  "zhu": {
+    "file": "covers/zhu.jpg",
+    "small": "covers/zhu-small.jpg",
+    "width": 1440,
+    "height": 810,
+    "video": "zhu.mp4",
+    "videoWidth": 1280,
+    "videoHeight": 720,
+    "seconds": 32,
+    "excerpt": true,
+    "smallWidth": 640
+  },
+  "xiang": {
+    "file": "covers/xiang.jpg",
+    "small": "covers/xiang-small.jpg",
+    "width": 1440,
+    "height": 810,
+    "video": "xiang.mp4",
+    "videoWidth": 1280,
+    "videoHeight": 720,
+    "seconds": 30,
+    "excerpt": true,
+    "smallWidth": 640
+  },
+  "ning": {
+    "file": "covers/ning.jpg",
+    "small": "covers/ning-small.jpg",
+    "width": 1440,
+    "height": 810,
+    "video": "ning.mp4",
+    "videoWidth": 1280,
+    "videoHeight": 720,
+    "seconds": 30,
+    "excerpt": true,
+    "smallWidth": 640
+  },
+  "yuan": {
+    "file": "covers/yuan.jpg",
+    "small": "covers/yuan-small.jpg",
+    "width": 1440,
+    "height": 810,
+    "video": "yuan.mp4",
+    "videoWidth": 1280,
+    "videoHeight": 720,
+    "seconds": 30,
+    "excerpt": true,
+    "smallWidth": 640
+  },
+  "xiao": {
+    "file": "covers/xiao.jpg",
+    "small": "covers/xiao-small.jpg",
+    "width": 1440,
+    "height": 810,
+    "video": "xiao.mp4",
+    "videoWidth": 1280,
+    "videoHeight": 720,
+    "seconds": 30,
+    "excerpt": true,
+    "smallWidth": 640
+  },
+  "mai": {
+    "file": "covers/mai.jpg",
+    "small": "covers/mai-small.jpg",
+    "width": 1440,
+    "height": 810,
+    "video": "mai.mp4",
+    "videoWidth": 1280,
+    "videoHeight": 720,
+    "seconds": 30,
+    "excerpt": true,
+    "smallWidth": 640
+  },
+  "panda": {
+    "file": "covers/panda.jpg",
+    "small": "covers/panda-small.jpg",
+    "width": 1440,
+    "height": 810,
+    "video": "panda.mp4",
+    "videoWidth": 1280,
+    "videoHeight": 720,
+    "seconds": 30,
+    "excerpt": true,
+    "smallWidth": 640
+  },
+  "yue": {
+    "file": "covers/yue.jpg",
+    "small": "covers/yue-small.jpg",
+    "width": 1440,
+    "height": 810,
+    "video": "yue.mp4",
+    "videoWidth": 1280,
+    "videoHeight": 720,
+    "seconds": 30,
+    "excerpt": true,
+    "smallWidth": 640
+  },
+  "wuhan-motion": {
+    "file": "wuhan-motion.jpg",
+    "small": "wuhan-motion-small.jpg",
+    "width": 1680,
+    "height": 336,
+    "video": "wuhan-motion.mp4",
+    "videoWidth": 1600,
+    "videoHeight": 320,
+    "seconds": 23,
+    "excerpt": false,
+    "smallWidth": 640
+  },
+  "auto1": {
+    "file": "auto1.jpg",
+    "small": "auto1-small.jpg",
+    "width": 1680,
+    "height": 945,
+    "video": "auto1.mp4",
+    "videoWidth": 1440,
+    "videoHeight": 810,
+    "seconds": 104,
+    "excerpt": false,
+    "smallWidth": 640
+  },
+  "auto2": {
+    "file": "auto2.jpg",
+    "small": "auto2-small.jpg",
+    "width": 1680,
+    "height": 945,
+    "video": "auto2.mp4",
+    "videoWidth": 1440,
+    "videoHeight": 810,
+    "seconds": 32,
+    "excerpt": true,
+    "smallWidth": 640
+  },
+  "auto3": {
+    "file": "auto3.jpg",
+    "small": "auto3-small.jpg",
+    "width": 1680,
+    "height": 945,
+    "video": "auto3.mp4",
+    "videoWidth": 1440,
+    "videoHeight": 810,
+    "seconds": 32,
+    "excerpt": true,
+    "smallWidth": 640
+  },
+  "auto4": {
+    "file": "auto4.jpg",
+    "small": "auto4-small.jpg",
+    "width": 1680,
+    "height": 945,
+    "video": "auto4.mp4",
+    "videoWidth": 1440,
+    "videoHeight": 810,
+    "seconds": 32,
+    "excerpt": true,
+    "smallWidth": 640
+  },
+  "auto5": {
+    "file": "auto5.jpg",
+    "small": "auto5-small.jpg",
+    "width": 1680,
+    "height": 945,
+    "video": "auto5.mp4",
+    "videoWidth": 1440,
+    "videoHeight": 810,
+    "seconds": 32,
+    "excerpt": true,
+    "smallWidth": 640
+  },
+  "mariana": {
+    "file": "covers/mariana-16x9.webp",
+    "small": "covers/mariana-16x9-small.webp",
+    "width": 1440,
+    "height": 810,
+    "video": "mariana.mp4",
+    "videoWidth": 1280,
+    "videoHeight": 720,
+    "seconds": 53,
+    "excerpt": false,
+    "smallWidth": 640
+  },
+  "panama": {
+    "file": "covers/panama-16x9.webp",
+    "small": "covers/panama-16x9-small.webp",
+    "width": 1440,
+    "height": 810,
+    "video": "panama.mp4",
+    "videoWidth": 1280,
+    "videoHeight": 720,
+    "seconds": 74,
+    "excerpt": false,
+    "smallWidth": 640
+  },
+  "fsd1": {
+    "file": "fsd1.jpg",
+    "small": "fsd1-small.jpg",
+    "width": 1680,
+    "height": 945,
+    "video": "fsd1.mp4",
+    "videoWidth": 1440,
+    "videoHeight": 810,
+    "seconds": 30,
+    "excerpt": true,
+    "smallWidth": 640
+  },
+  "fsd2": {
+    "file": "fsd2.jpg",
+    "small": "fsd2-small.jpg",
+    "width": 1680,
+    "height": 945,
+    "video": "fsd2.mp4",
+    "videoWidth": 1440,
+    "videoHeight": 810,
+    "seconds": 30,
+    "excerpt": true,
+    "smallWidth": 640
+  },
+  "nvidia": {
+    "file": "nvidia.jpg",
+    "small": "nvidia-small.jpg",
+    "width": 1680,
+    "height": 945,
+    "video": "nvidia.mp4",
+    "videoWidth": 1280,
+    "videoHeight": 720,
+    "seconds": 32,
+    "excerpt": true,
+    "smallWidth": 640
+  },
+  "wuhan": {
+    "file": "wuhan.jpg",
+    "small": "wuhan-small.jpg",
+    "width": 1680,
+    "height": 945,
+    "smallWidth": 640
+  },
+  "wuhan-agenda": {
+    "file": "wuhan-agenda.jpg",
+    "small": "wuhan-agenda-small.jpg",
+    "width": 1680,
+    "height": 1120,
+    "smallWidth": 640
+  },
+  "wuhan-id": {
+    "file": "wuhan-id.jpg",
+    "small": "wuhan-id-small.jpg",
+    "width": 1680,
+    "height": 1519,
+    "smallWidth": 640
+  },
+  "changsha": {
+    "file": "changsha.jpg",
+    "small": "changsha-small.jpg",
+    "width": 1680,
+    "height": 840,
+    "smallWidth": 640
+  },
+  "changsha-wide": {
+    "file": "changsha-wide.jpg",
+    "small": "changsha-wide-small.jpg",
+    "width": 1680,
+    "height": 336,
+    "smallWidth": 640
+  },
+  "changsha-person": {
+    "file": "changsha-person.jpg",
+    "small": "changsha-person-small.jpg",
+    "width": 1680,
+    "height": 336,
+    "smallWidth": 640
+  },
+  "changsha-invite": {
+    "file": "changsha-invite.jpg",
+    "small": "changsha-invite-small.jpg",
+    "width": 1259,
+    "height": 1680,
+    "smallWidth": 480
+  },
+  "changsha-agenda": {
+    "file": "changsha-agenda.jpg",
+    "small": "changsha-agenda-small.jpg",
+    "width": 1680,
+    "height": 1120,
+    "smallWidth": 640
+  },
+  "changsha-flyer": {
+    "file": "changsha-flyer.jpg",
+    "small": "changsha-flyer-small.jpg",
+    "width": 1549,
+    "height": 1680,
+    "smallWidth": 590
+  },
+  "zhengzhou": {
+    "file": "zhengzhou.jpg",
+    "small": "zhengzhou-small.jpg",
+    "width": 1440,
+    "height": 1680,
+    "smallWidth": 548
+  },
+  "portrait": {
+    "file": "portrait-extended.webp",
+    "small": "portrait-extended-small.webp",
+    "width": 1122,
+    "height": 1165,
+    "smallWidth": 560
+  },
+  "binance-1": {
+    "file": "covers/binance-1-16x9.webp",
+    "small": "covers/binance-1-16x9-small.webp",
+    "width": 1440,
+    "height": 810,
+    "smallWidth": 640,
+    "video": "binance-1.mp4",
+    "videoWidth": 1280,
+    "videoHeight": 720,
+    "seconds": 85,
+    "excerpt": false
+  },
+  "binance-2": {
+    "file": "covers/binance-2-16x9.webp",
+    "small": "covers/binance-2-16x9-small.webp",
+    "width": 1440,
+    "height": 810,
+    "smallWidth": 640,
+    "video": "binance-2.mp4",
+    "videoWidth": 1280,
+    "videoHeight": 720,
+    "seconds": 182,
+    "excerpt": false
+  },
+  "binance-3": {
+    "file": "covers/binance-3-16x9.webp",
+    "small": "covers/binance-3-16x9-small.webp",
+    "width": 1440,
+    "height": 810,
+    "smallWidth": 640,
+    "video": "binance-3.mp4",
+    "videoWidth": 1280,
+    "videoHeight": 720,
+    "seconds": 90,
+    "excerpt": false
+  }
+}

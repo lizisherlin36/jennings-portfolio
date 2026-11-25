@@ -1,0 +1,18 @@
+---
+import { projects, route } from '../data/projects';
+import Artwork from './Artwork.astro';
+const { project } = Astro.props as { project: (typeof projects)[number] };
+---
+<article class="work-card" data-category={project.category}>
+  <a class="work-card-link" href={route(`work/${project.slug}/`)}>
+    <div class="work-cover"><Artwork art={project.cover} alt={project.coverAlt} /></div>
+    <div class="work-card-body">
+      <div class="work-card-copy">
+        <p class="eyebrow work-tag">{project.context} <span>/</span> {project.format}</p>
+        <h3>{project.title}</h3>
+        <p class="work-summary">{project.summary}</p>
+      </div>
+      <span class="work-action" aria-hidden="true">查看</span>
+    </div>
+  </a>
+</article>

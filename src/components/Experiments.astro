@@ -1,0 +1,48 @@
+---
+import { route } from '../data/projects';
+
+const experiments = [
+  {
+    title: 'Motion Design Lab',
+    kind: '动效实验室',
+    summary: '收录 48 个可操作的动效示例，涵盖动态文字、图形转场、数据叙事和空间动效。可拖动时间线，尝试不同的时长和缓动。',
+    image: 'motion-design-lab',
+    alt: 'Motion Design Lab 实际首屏，右侧展示动态文字、构图与网格实验。',
+    url: 'https://lizisherlin36.github.io/motion-design-lab/index.html',
+  },
+  {
+    title: 'M113 Showcase',
+    kind: 'Three.js 交互展示',
+    summary: '用实时三维场景展示车辆模型，通过镜头和部件标记探索模型的空间结构。',
+    image: 'm113-showcase',
+    alt: 'M113 Showcase 实际首屏，车辆模型位于三维场景中央。',
+    url: 'https://lizisherlin36.github.io/m113-showcase/',
+  },
+];
+---
+<div class="experiment-list">
+  {experiments.map(item => (
+    <article class="experiment-card">
+      <a href={item.url} target="_blank" rel="noopener noreferrer">
+        <figure>
+          <img
+            src={route(`media/experiments/${item.image}.webp`)}
+            srcset={`${route(`media/experiments/${item.image}-small.webp`)} 720w, ${route(`media/experiments/${item.image}.webp`)} 1440w`}
+            sizes="(max-width: 700px) 94vw, 48vw"
+            width="1440"
+            height="900"
+            loading="lazy"
+            decoding="async"
+            alt={item.alt}
+          />
+        </figure>
+        <div class="experiment-copy">
+          <p class="fine-label">{item.kind}</p>
+          <h3 lang="en">{item.title}</h3>
+          <p class="experiment-summary">{item.summary}</p>
+          <span class="text-link">进入实验站</span>
+        </div>
+      </a>
+    </article>
+  ))}
+</div>

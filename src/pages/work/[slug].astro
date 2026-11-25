@@ -1,0 +1,81 @@
+---
+import Site from '../../layouts/Site.astro';
+import Film from '../../components/Film.astro';
+import Artwork from '../../components/Artwork.astro';
+import WorkCard from '../../components/WorkCard.astro';
+import FilmSeries from '../../components/FilmSeries.astro';
+import { artwork, categories, projects, route } from '../../data/projects';
+
+export function getStaticPaths() {
+  return projects.map(project => ({ params: { slug: project.slug }, props: { project } }));
+}
+
+const { project } = Astro.props;
+const local = project.episodes?.filter(item => item.key) ?? [];
+const remote = project.episodes?.filter(item => !item.key && item.original) ?? [];
+const editorialRows = project.category === 'commercial' && !project.gallery;
+const related = projects.filter(item => item.category === project.category && item.slug !== project.slug).slice(0, 2);
+const group = route(`work/?category=${project.category}`);
+---
+<Site theme={project.gallery ? undefined : `cinema-${project.cover}`} title={project.title} description={project.summary} section="work" image={artwork(project.cover).src}>
+  <div class="case-header">
+    <div class="shell case-top">
+      <a href={group} class="text-link back-link">返回{categories[project.category]}</a>
+      <div class="case-heading">
+        <div>
+          <p class="eyebrow"><span class="accent-line" aria-hidden="true"></span> {project.context} / {project.format}</p>
+          <h1>{project.title}</h1>
+        </div>
+        <div>
+          <p class="case-summary">{project.summary}</p>
+          {project.year && <p class="eyebrow case-year">{project.year}</p>}
+        </div>
+      </div>
+    </div>
+  </div>
+  <section class="shell case-content">
+    {project.series && <FilmSeries series={project.series} />}
+    {local.length > 0 && (
+      <div class="case-work">
+        <div class="case-subhead"><h2>{local.length > 1 ? '视频作品' : '观看作品'}</h2></div>
+        {editorialRows ? (
+          <div class="film-rows">{local.map(episode => <Film episode={episode} />)}</div>
+        ) : (
+          <div class="film-grid">
+            <div class="lead-film"><Film episode={local[0]} /></div>
+            {local.slice(1).map(episode => <Film episode={episode} />)}
+          </div>
+        )}
+      </div>
+    )}
+    {remote.length > 0 && (
+      <section class="external-works">
+        <div class="case-subhead"><h2>更多原片</h2></div>
+        <ul>
+          {remote.map(item => <li><a href={item.original} target="_blank" rel="noopener noreferrer"><span>{item.title}</span><span class="text-link">抖音原片</span></a></li>)}
+        </ul>
+      </section>
+    )}
+    <div class="case-notes">
+      <h2>项目简介</h2>
+      <div>
+        <p>{project.description}</p>
+        {project.contribution && <p>{project.contribution}</p>}
+      </div>
+    </div>
+    {project.gallery && (
+      <section class="case-gallery">
+        <div class="case-subhead"><h2>视觉与物料</h2></div>
+        <div class="gallery-grid">
+          {project.gallery.map(({ key, caption }) => <figure><Artwork art={key} alt={caption} /><figcaption>{caption}</figcaption></figure>)}
+        </div>
+      </section>
+    )}
+    {related.length > 0 && (
+      <section class="related">
+        <div class="case-subhead"><h2>相关作品</h2></div>
+        <div class="catalog-grid">{related.map(item => <WorkCard project={item} />)}</div>
+      </section>
+    )}
+  </section>
+</Site>

@@ -1,0 +1,51 @@
+---
+import Site from '../../layouts/Site.astro';
+import Artwork from '../../components/Artwork.astro';
+import { route } from '../../data/projects';
+---
+<Site title="关于 Jennings Li" section="about" description="Jennings Li，设计师出身的内容创作者。从餐饮行业的 To B 内容营销到个人 AI 影像，参与从选题、前采到拍摄剪辑与发布的完整制作流程。">
+  <section class="portrait-stage">
+    <div class="shell portrait-title">
+      <div class="portrait-copy">
+        <p class="fine-label">关于我 · 38 岁</p>
+        <h1 lang="en">Jennings Li<span>.</span></h1>
+        <p class="portrait-role">设计师出身的内容创作者。</p>
+      </div>
+    </div>
+    <figure>
+      <Artwork
+        art="portrait"
+        alt="Jennings Li 的职业肖像"
+        priority
+        sizes="(min-width: 1280px) 540px, (min-width: 761px) 47vw, (min-width: 448px) 448px, 100vw"
+      />
+    </figure>
+  </section>
+  <section class="shell profile-intro"><h2>从设计到内容创作</h2><div>
+      <p>我本科读工业设计，硕士读艺术设计。2015 年开始工作，做过电商设计，也在外资品牌的中国区市场部做品牌设计、策划商品拍摄。这段经历让我习惯在确定画面之前，先弄清产品要向谁讲、要讲清什么。</p>
+      <p>在美团餐饮系统，我把这个习惯带进了 To B 内容营销。面对同一家门店，客户想讲自己的招牌产品，销售关心系统如何解决经营问题。我的工作是找到两者相遇的具体场景，把它做成客户愿意讲、同行看得懂的内容。</p>
+      <div class="hero-actions"><a class="button button-solid" href={route('work/?category=commercial')}>查看商业作品</a><a class="button button-outline" href={route('ai-lab/')}>查看个人创作</a></div>
+
+</div></section>
+  <section class="shell bio-story">
+    <header><p class="eyebrow">美团餐饮系统 · 市场营销</p><h2>从活动现场<br />到镜头背后</h2></header>
+    <div>
+      <p>2020 年底加入市场组后，我最初为商户沙龙、行业大会做主视觉、会议物料和现场记录，也参与销售培训视频制作。2023 年的「餐饮核心竞争力中国行」，让我有机会把同一套视觉语言从活动宣传延伸到线下现场。</p>
+      <p>2023 年下半年，我主动提出为业务制作对外视频，随后开始负责访谈与客户案例。《掌门说》从标识和动态片头做起，我负责调研、前采、提纲和排期，与一位摄影助理完成现场拍摄，再把采访和门店实景剪成完整节目。</p>
+      <a class="text-link" href={route('work/meituan-zhangmenshuo/')}>观看《掌门说》</a>
+    </div>
+  </section>
+  <section class="shell about-practice pipeline">
+    <div class="case-subhead"><h2>一支客户案例是怎么做出来的</h2></div>
+    <dl>
+      <div><dt>筛选选题</dt><dd>销售提报客户后，我和市场组判断选题是否成立。开店速度、单店经营或供应链里的一个具体变化，都可能成为切入口。</dd></div>
+      <div><dt>客户前采与分镜</dt><dd>先向业务侧了解合作背景，再与客户确认门店特色和可公开的信息。把双方的重点收进一份约三分钟的大纲，逐轮确认人物、地点、分镜与拍摄日程。</dd></div>
+      <div><dt>拍摄、剪辑与发布</dt><dd>现场既拍人物，也采集能解释问题的门店操作和产品画面。回到剪辑台完成叙事、字幕与视觉包装，再与业务和客户核对、修改、交付发布。熊猫塔塔中国汉堡这一期由我独立完成拍摄与剪辑。</dd></div>
+    </dl>
+    <a class="text-link" href={route('work/meituan-customer-cases/#watch-panda')}>查看熊猫塔塔案例</a>
+  </section>
+  <section class="shell bio-story">
+    <header><p class="eyebrow">个人创作</p><h2>把方法带进<br />新的题材</h2></header>
+    <div><p>现在，我把选题、视觉设计与视频制作结合起来，用 ChatGPT 与 Claude 辅助创作《中国车企出海》，也尝试把海沟深度、船闸原理做成动态图解。Motion Design Lab 和 Three.js 实验则让我继续探索，观众如何通过交互理解一个主题。</p><a class="text-link" href={route('ai-lab/')}>浏览 AI Lab</a></div>
+  </section>
+</Site>

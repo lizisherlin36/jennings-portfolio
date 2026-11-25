@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+.env*
+/1. 视频 美团工作/
+/2. 大会主视觉 美团 设计工作/
+/3. AI视频 个人自制/
+/4. AI交互与动效实验/
+/Personal Info/
+/CODEX_BUILD_BRIEF.md
+/MEITUAN_VIDEO_LIBRARY.md
+/PROJECTS_TEMPLATE.md
+/预览/
+/5. GOOD LOOKS/
+/Jennings-Li-Portfolio-GitHub-Pages.zip

@@ -1,0 +1,123 @@
+---
+import Site from '../layouts/Site.astro';
+import Artwork from '../components/Artwork.astro';
+import Experiments from '../components/Experiments.astro';
+import GoodLooks from '../components/GoodLooks.astro';
+import HeroReel from '../components/HeroReel.astro';
+import WorkCard from '../components/WorkCard.astro';
+import { artwork, projectBySlug, projects, route } from '../data/projects';
+import '../styles/screening.css';
+
+const films = [
+  { key:'zhu', slug:'meituan-zhangmenshuo', title:'《掌门说》', type:'人物访谈', en:'Interview' },
+  { key:'panda', slug:'meituan-customer-cases', title:'餐饮客户案例', type:'客户案例', en:'Customer stories' },
+  { key:'annual', slug:'meituan-brand-films', title:'品牌影像', type:'年度作品', en:'Brand films' },
+] as const;
+const motionWork = projects.filter(project => project.category === 'motion');
+---
+<Site theme="cinema-home" overlayHeader image={route('media/reels/annual-hero.webp')}>
+  <HeroReel mode="home" />
+  <section class="shell portfolio-intro" id="portfolio" aria-labelledby="portfolio-title">
+    <div class="portfolio-lead">
+      <h2 id="portfolio-title" lang="en">Personal <em>Portfolio.</em></h2>
+      <p>从餐饮品牌的真实故事，到科技与地理的动态叙事。</p>
+    </div>
+    <nav class="portfolio-jumps" aria-label="作品分类">
+      <a href="#screenings">商业作品 <span lang="en">Commercial</span></a>
+      <a href="#motion">AI 影像 <span lang="en">Motion</span></a>
+      <a href="#experiments">创意技术 <span lang="en">Experiments</span></a>
+      <a href="#goodlooks">GOOD LOOKS <span>视觉创作</span></a>
+    </nav>
+  </section>
+  <section class="shell screening" id="screenings" aria-label="商业作品">
+    <aside class="film-index"><div>
+      <p class="film-kicker">美团餐饮系统</p>
+      <h2>商业作品</h2>
+      <nav aria-label="商业作品索引">{films.map(film => <a href={`#film-${film.key}`}>{film.type}</a>)}<a href="#film-design">大会视觉</a></nav>
+      <a class="text-link" href={route('work/?category=commercial')}>商业作品目录</a>
+    </div></aside>
+    <div class="chapters">
+      {films.map(film => <article class="chapter" id={`film-${film.key}`}>
+        <button class="chapter-frame" type="button" aria-label={`播放 ${film.title}`} data-film={route(`media/${film.key}.mp4`)} data-title={film.title} data-case={route(`work/${film.slug}/`)} data-poster={artwork(film.key).src}>
+          <Artwork art={film.key} alt={projectBySlug(film.slug).coverAlt} sizes="(min-width: 960px) 65vw, 95vw" />
+          <span class="round-play" aria-hidden="true"><span class="play-icon"></span></span>
+        </button>
+        <div class="chapter-foot"><div><p class="film-kicker">{film.en} <i></i> {film.type}</p><h3>{film.title}</h3></div><a class="text-link" href={route(`work/${film.slug}/`)}>项目详情</a></div>
+      </article>)}
+      <article class="chapter" id="film-design">
+        <a class="chapter-frame" href={route('work/meituan-conference/')}>
+          <Artwork art="wuhan" alt="美团武汉餐饮行业大会主视觉" sizes="(min-width: 960px) 65vw, 95vw" />
+        </a>
+        <div class="chapter-foot"><div><p class="film-kicker">Event design <i></i> 品牌设计</p><h3>美团餐饮行业大会</h3></div><a class="text-link" href={route('work/meituan-conference/')}>项目详情</a></div>
+      </article>
+    </div>
+  </section>
+  <section class="shell home-motion" id="motion">
+    <div class="home-section-title"><div><p class="film-kicker">独立创作</p><h2>AI 影像</h2></div><a class="text-link" href={route('ai-lab/')}>进入 AI Lab</a></div>
+    <div class="catalog-grid">{motionWork.map(project => <WorkCard project={project} />)}</div>
+  </section>
+  <section class="studio" id="experiments"><div class="shell studio-inner">
+    <div class="home-section-title"><div><p class="film-kicker">动效与三维交互</p><h2>创意技术</h2></div><a class="text-link" href={route('experiments/')}>查看实验目录</a></div>
+    <Experiments />
+  </div></section>
+  <section class="goodlooks-band" id="goodlooks"><div class="shell"><GoodLooks preview /></div></section>
+  <div class="shell home-profile"><p>Jennings Li <span>/</span> 品牌营销、影像制作与独立创作</p><a class="text-link" href={route('about/')}>个人说明</a></div>
+  <dialog class="screening-room" aria-labelledby="room-title">
+    <div class="room-top"><h2 id="room-title"></h2><button type="button" class="room-close" autofocus>关闭</button></div>
+    <video controls playsinline preload="none"></video>
+    <div class="room-foot"><span role="status"></span><a class="text-link">查看项目与片源</a></div>
+  </dialog>
+</Site>
+<script>
+  const room = document.querySelector<HTMLDialogElement>('.screening-room')!;
+  const player = room.querySelector('video')!;
+  const status = room.querySelector('[role=status]')!;
+  const title = room.querySelector('h2')!;
+  const caseLink = room.querySelector('a')!;
+  for (const button of document.querySelectorAll<HTMLButtonElement>('[data-film]')) {
+    button.addEventListener('click', () => {
+      title.textContent = button.dataset.title!;
+      caseLink.href = button.dataset.case!;
+      status.textContent = '';
+      player.poster = button.dataset.poster!;
+      player.src = button.dataset.film!;
+      room.showModal();
+      player.play().catch(() => { if (room.open && !player.error) status.textContent = '点击播放器继续观看。'; });
+    });
+  }
+  player.addEventListener('error', () => { if (room.open) status.textContent = '视频加载失败，可前往项目页重试。'; });
+  room.querySelector('.room-close')!.addEventListener('click', () => room.close());
+  room.addEventListener('click', event => {
+    if (event.target !== room) return;
+    const bounds = room.getBoundingClientRect();
+    if (event.clientX < bounds.left || event.clientX > bounds.right ||
+        event.clientY < bounds.top || event.clientY > bounds.bottom) room.close();
+  });
+  room.addEventListener('close', () => { player.pause(); player.removeAttribute('src'); player.load(); });
+
+  const desktop = matchMedia('(min-width: 900px) and (prefers-reduced-motion: no-preference)');
+  const frames = [...document.querySelectorAll<HTMLElement>('.chapter-frame')];
+  const chapters = [...document.querySelectorAll<HTMLElement>('.chapter')];
+  const links = [...document.querySelectorAll('.film-index nav a')];
+  let pending = false;
+  function draw() {
+    pending = false;
+    let current = 0;
+    chapters.forEach((chapter, index) => {
+      if (chapter.getBoundingClientRect().top < innerHeight * .6) current = index;
+    });
+    links.forEach((link, index) => index === current ? link.setAttribute('aria-current','location') : link.removeAttribute('aria-current'));
+    if (!desktop.matches) return;
+    for (const frame of frames) {
+      const rect = frame.getBoundingClientRect();
+      if (rect.bottom < 0 || rect.top > innerHeight) continue;
+      const phase = (innerHeight / 2 - rect.top - rect.height / 2) / (innerHeight + rect.height);
+      frame.style.setProperty('--drift', Math.round(phase * 18) + 'px');
+    }
+  }
+  function queue() { if (!pending) { pending = true; requestAnimationFrame(draw); } }
+  addEventListener('scroll', queue, { passive:true });
+  addEventListener('resize', queue);
+  desktop.addEventListener('change', queue);
+  draw();
+</script>

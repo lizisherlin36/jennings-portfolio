@@ -1,0 +1,70 @@
+---
+import { artwork, route, type Episode } from '../data/projects';
+import Artwork from './Artwork.astro';
+
+const { episode } = Astro.props as { episode: Episode };
+const originalLabel = episode.originalLabel ?? '抖音原片';
+const film = episode.key ? artwork(episode.key) : undefined;
+const hasVideo = film && 'video' in film;
+const length = (seconds: number) => `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
+---
+{hasVideo && episode.key && (
+  <article class="film" id={`watch-${episode.key}`}>
+    <div class:list={['screen', { portrait: film.videoHeight > film.videoWidth, ultrawide: film.videoWidth / film.videoHeight > 3 }]} style={`--film-ratio:${film.videoWidth}/${film.videoHeight}`}>
+      <button type="button" class="film-launch" aria-label={`播放 ${episode.title}`} data-launch>
+        <Artwork art={episode.key} alt="" sizes="(min-width: 900px) 50vw, 100vw" />
+        <span class="play-disc" aria-hidden="true"><span class="play-icon"></span></span>
+      </button>
+      <video aria-label={episode.title} data-src={route(`media/${film.video}`)} poster={film.src} controls playsinline preload="none" hidden></video>
+    </div>
+    <div class="film-caption">
+      <div>
+        <p class="eyebrow">{episode.label && `${episode.label} / `}{film.excerpt ? '作品节选' : '完整版'} <span>·</span> {length(film.seconds)}</p>
+        <h3>{episode.title}</h3>
+        {episode.synopsis && <p class="film-synopsis">{episode.synopsis}</p>}
+      </div>
+      {episode.original && <a class="text-link" href={episode.original} target="_blank" rel="noopener noreferrer">{originalLabel}</a>}
+    </div>
+    <p class="film-error" role="status" hidden>视频暂时无法播放，可点击封面重试。{episode.original && `也可打开${originalLabel}。`}</p>
+  </article>
+)}
+<script>
+  const videos = Array.from(document.querySelectorAll<HTMLVideoElement>('video[data-src]'));
+  for (const video of videos) {
+    const film = video.closest('.film')!;
+    const launch = film.querySelector<HTMLButtonElement>('[data-launch]')!;
+    const error = film.querySelector<HTMLElement>('.film-error')!;
+
+    const showError = () => {
+      video.hidden = true;
+      launch.hidden = false;
+      error.hidden = false;
+      if (document.activeElement === video) launch.focus();
+      video.removeAttribute('src');
+      video.load();
+    };
+
+    video.addEventListener('error', () => {
+      if (video.hasAttribute('src')) showError();
+    });
+
+    video.addEventListener('play', () => {
+      if (video.paused) return;
+      for (const other of videos) {
+        if (other !== video) other.pause();
+      }
+    });
+
+    launch.addEventListener('click', () => {
+      error.hidden = true;
+      video.hidden = false;
+      launch.hidden = true;
+      video.src = video.dataset.src!;
+      video.focus({ preventScroll: true });
+      video.play().catch(reason => {
+        if (reason.name === 'NotAllowedError' || reason.name === 'AbortError') return;
+        if (video.hasAttribute('src')) showError();
+      });
+    });
+  }
+</script>

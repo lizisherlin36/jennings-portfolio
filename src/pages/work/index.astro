@@ -1,0 +1,65 @@
+---
+import CommercialDirectory from '../../components/CommercialDirectory.astro';
+import Experiments from '../../components/Experiments.astro';
+import GoodLooks from '../../components/GoodLooks.astro';
+import Site from '../../layouts/Site.astro';
+import WorkCard from '../../components/WorkCard.astro';
+import { categories, projects } from '../../data/projects';
+---
+<Site title="作品" section="work">
+  <div class="shell page-top">
+    <p class="eyebrow"><span class="accent-line" aria-hidden="true"></span> 作品目录</p>
+    <h1 lang="en"><span data-index-title>Work</span><span class="accent-period">.</span></h1>
+    <p class="page-lead" data-index-intro>商业项目与个人创作。</p>
+  </div>
+  <section class="shell work-index" aria-label="项目列表">
+    <div class="filters" aria-label="按类别筛选作品" hidden>
+      <button type="button" data-filter="all" aria-pressed="true">全部</button>
+      {Object.entries(categories).map(([key, label]) => <button type="button" data-filter={key} aria-pressed="false">{label}</button>)}
+    </div>
+    <CommercialDirectory />
+    <div class="catalog-grid">
+      {projects.filter(project => project.category !== 'commercial').map(project => <WorkCard project={project} />)}
+    </div>
+    <div data-category="goodlooks"><GoodLooks /></div>
+    <div data-category="technology"><Experiments /></div>
+    <p class="empty-state" role="status" hidden>此分类的作品正在整理。</p>
+  </section>
+</Site>
+<script>
+  const filters = document.querySelector<HTMLElement>('.filters')!;
+  const buttons = Array.from(filters.querySelectorAll<HTMLButtonElement>('[data-filter]'));
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-category]'));
+  const status = document.querySelector<HTMLElement>('.empty-state')!;
+  const themeColor = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+  const defaultThemeColor = themeColor?.content;
+
+  function update(category: string) {
+    const commercial = category === 'commercial';
+    document.body.dataset.workCategory = category;
+    if (themeColor && defaultThemeColor) themeColor.content = category === 'goodlooks' ? '#101015' : defaultThemeColor;
+    document.querySelector('[data-index-title]')!.textContent =
+      commercial ? 'Commercial work' : category === 'goodlooks' ? 'GOOD LOOKS' : 'Work';
+    document.querySelector('[data-index-intro]')!.textContent = commercial ? '美团餐饮系统的商业影像与品牌活动视觉。' : '商业项目与个人创作。';
+    for (const button of buttons) button.setAttribute('aria-pressed', String(button.dataset.filter === category));
+    for (const card of cards) card.hidden = category !== 'all' && card.dataset.category !== category;
+    status.hidden = cards.some(card => !card.hidden);
+  }
+
+  function fromUrl() {
+    const picked = new URL(location.href).searchParams.get('category');
+    update(buttons.some(button => button.dataset.filter === picked) ? picked! : 'all');
+  }
+
+  filters.hidden = false;
+  fromUrl();
+  window.addEventListener('popstate', fromUrl);
+  for (const button of buttons) button.addEventListener('click', () => {
+    const category = button.dataset.filter!;
+    const url = new URL(location.href);
+    if (category === 'all') url.searchParams.delete('category');
+    else url.searchParams.set('category', category);
+    if (url.href !== location.href) history.pushState({}, '', url);
+    update(category);
+  });
+</script>

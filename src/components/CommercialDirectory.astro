@@ -1,0 +1,31 @@
+---
+import { projectBySlug, route } from '../data/projects';
+import Artwork from './Artwork.astro';
+const filmGroups = [
+  { slug: 'meituan-zhangmenshuo', title: '掌门说', text: '餐饮经营者的深度对谈，并收录两支独立访谈。' },
+  { slug: 'meituan-customer-cases', title: '餐饮客户案例', text: '走进门店，讲清经营者面对的问题，以及产品在业务中如何使用。' },
+  { slug: 'meituan-brand-films', title: '品牌影像', text: '年度回顾、烧烤季温情短片与如意 AI 的产品亮相。' },
+];
+const design = projectBySlug('meituan-conference');
+---
+<div class="commercial-directory" data-category="commercial">
+  <section aria-labelledby="commercial-video-title">
+    <div class="directory-heading"><h2 id="commercial-video-title">商业视频</h2><span lang="en">Films</span></div>
+    {filmGroups.map(group => {
+      const project = projectBySlug(group.slug);
+      return <a class="directory-entry" href={route(`work/${project.slug}/`)}>
+        <div class="entry-copy"><p>{project.format} <span>／</span> {project.episodes?.length} 支作品</p><h3>{group.title}</h3>
+          <p class="entry-summary">{group.text}</p><span class="entry-link">浏览系列</span>
+        </div>
+        <div class="entry-image"><Artwork art={project.cover} alt={project.coverAlt} sizes="(min-width: 800px) 38vw, 94vw" /></div>
+      </a>;
+    })}
+  </section>
+  <section aria-labelledby="commercial-design-title">
+    <div class="directory-heading"><h2 id="commercial-design-title">视觉设计</h2><span lang="en">Design</span></div>
+    <a class="directory-entry" href={route(`work/${design.slug}/`)}>
+      <div class="entry-copy"><p>活动视觉 <span>／</span> {design.year}</p><h3>餐饮行业大会</h3><p class="entry-summary">{design.summary}</p><span class="entry-link">查看设计项目</span></div>
+      <div class="entry-image"><Artwork art={design.cover} alt={design.coverAlt} sizes="(min-width: 800px) 38vw, 94vw" /></div>
+    </a>
+  </section>
+</div>

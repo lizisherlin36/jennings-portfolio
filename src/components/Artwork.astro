@@ -1,0 +1,23 @@
+---
+import { artwork, route } from '../data/projects';
+
+interface Props {
+  art: Parameters<typeof artwork>[0];
+  alt: string;
+  sizes?: string;
+  priority?: boolean;
+}
+const { art, alt, sizes = '(min-width: 960px) 50vw, 100vw', priority = false } = Astro.props;
+const item = artwork(art);
+---
+<img
+  src={item.src}
+  srcset={`${route(`media/${item.small}`)} ${item.smallWidth}w, ${item.src} ${item.width}w`}
+  sizes={sizes}
+  alt={alt}
+  width={item.width}
+  height={item.height}
+  loading={priority ? 'eager' : 'lazy'}
+  fetchpriority={priority ? 'high' : undefined}
+  decoding={priority ? 'auto' : 'async'}
+/>
