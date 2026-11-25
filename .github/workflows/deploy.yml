@@ -7,19 +7,15 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
+  pages: read
 
 concurrency:
   group: github-pages
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - name: Check out source
         uses: actions/checkout@v7
@@ -44,6 +40,33 @@ jobs:
         uses: actions/upload-pages-artifact@v4
         with:
           path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - name: Wait for Pages artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          for attempt in {1..8}; do
+            artifact=$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts?name=github-pages" \
+              --jq '.artifacts[] | select(.name == "github-pages" and .expired == false) | .id') || artifact=
+            if [ -n "$artifact" ]; then
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "::error::GitHub Pages artifact did not become available."
+          exit 1
       - name: Deploy
         id: deploy
         uses: actions/deploy-pages@v4
