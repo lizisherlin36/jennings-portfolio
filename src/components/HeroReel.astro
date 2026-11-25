@@ -28,9 +28,9 @@ const mediaLink = (slide: typeof geography, extension: string) => route(`media/r
   <div class="shell hero-reel-layout">
     <div class="hero-reel-copy">
       <p class="fine-label">{home ? 'Jennings Li · 个人作品集' : '独立创作 · 动态影像'}</p>
-      {home ? <h1 id="reel-title" lang="en">Stories in<br /><em>Motion.</em></h1> : <h1 id="reel-title" lang="en">AI <em>Lab.</em></h1>}
+      {home ? <h1 id="reel-title" lang="en">Stories in<br /><em>Motion.</em></h1> : <h1 id="reel-title"><span lang="en">AI</span> <em>影像<span aria-hidden="true">.</span></em></h1>}
       <p class="reel-subtitle">{home ? '商业影像 · 品牌视觉 · AI 创作' : '用动态影像讲述地理、汽车与科技。'}</p>
-      <a class="reel-button" href={home ? '#portfolio' : '#ai-work'}>{home ? '浏览作品集' : '查看 AI 作品'}</a>
+      <a class="reel-button" href={home ? '#portfolio' : '#ai-work'}>{home ? '浏览作品集' : '查看 AI 影像'}</a>
     </div>
     <div class="reel-control" aria-label="视频轮播">
       <p class="fine-label">精选片段</p>

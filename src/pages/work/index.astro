@@ -33,13 +33,18 @@ import { categories, projects } from '../../data/projects';
   const status = document.querySelector<HTMLElement>('.empty-state')!;
   const themeColor = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
   const defaultThemeColor = themeColor?.content;
+  const directoryLink = document.querySelector('[data-nav-section="work"]')!;
+  const galleryLink = document.querySelector('[data-nav-section="goodlooks"]')!;
 
   function update(category: string) {
     const commercial = category === 'commercial';
+    const gallery = category === 'goodlooks';
     document.body.dataset.workCategory = category;
-    if (themeColor && defaultThemeColor) themeColor.content = category === 'goodlooks' ? '#101015' : defaultThemeColor;
+    (gallery ? directoryLink : galleryLink).removeAttribute('aria-current');
+    (gallery ? galleryLink : directoryLink).setAttribute('aria-current', 'page');
+    if (themeColor && defaultThemeColor) themeColor.content = gallery ? '#101015' : defaultThemeColor;
     document.querySelector('[data-index-title]')!.textContent =
-      commercial ? 'Commercial work' : category === 'goodlooks' ? 'GOOD LOOKS' : 'Work';
+      commercial ? 'Commercial work' : gallery ? 'GOOD LOOKS' : 'Work';
     document.querySelector('[data-index-intro]')!.textContent = commercial ? '美团餐饮系统的商业影像与品牌活动视觉。' : '商业项目与个人创作。';
     for (const button of buttons) button.setAttribute('aria-pressed', String(button.dataset.filter === category));
     for (const card of cards) card.hidden = category !== 'all' && card.dataset.category !== category;

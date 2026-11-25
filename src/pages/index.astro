@@ -5,7 +5,7 @@ import Experiments from '../components/Experiments.astro';
 import GoodLooks from '../components/GoodLooks.astro';
 import HeroReel from '../components/HeroReel.astro';
 import WorkCard from '../components/WorkCard.astro';
-import { artwork, projectBySlug, projects, route } from '../data/projects';
+import { artwork, categories, projectBySlug, projects, route } from '../data/projects';
 import '../styles/screening.css';
 
 const films = [
@@ -53,7 +53,7 @@ const motionWork = projects.filter(project => project.category === 'motion');
     </div>
   </section>
   <section class="shell home-motion" id="motion">
-    <div class="home-section-title"><div><p class="film-kicker">独立创作</p><h2>AI 影像</h2></div><a class="text-link" href={route('ai-lab/')}>进入 AI Lab</a></div>
+    <div class="home-section-title"><div><p class="film-kicker">独立创作</p><h2>{categories.motion}</h2></div><a class="text-link" href={route('ai-lab/')}>浏览 {categories.motion}</a></div>
     <div class="catalog-grid">{motionWork.map(project => <WorkCard project={project} />)}</div>
   </section>
   <section class="studio" id="experiments"><div class="shell studio-inner">

@@ -1,12 +1,13 @@
 ---
-import { route } from '../data/projects';
+import { categories, route } from '../data/projects';
 import '../styles/site.css';
 import '../styles/atmosphere.css';
 
 const { title, description = 'Jennings Li 的个人作品集，涵盖品牌视觉、商业视频与 AI 辅助创作。', section = '', image, overlayHeader = false } = Astro.props;
 const navigation = [
   { key: 'work', label: '作品', href: route('work/') },
-  { key: 'lab', label: 'AI Lab', href: route('ai-lab/') },
+  { key: 'lab', label: categories.motion, href: route('ai-lab/') },
+  { key: 'goodlooks', label: categories.goodlooks, href: route('work/?category=goodlooks'), lang: 'en' },
   { key: 'experiments', label: '实验', href: route('experiments/') },
   { key: 'about', label: '关于', href: route('about/') },
 ];
@@ -34,7 +35,7 @@ const themeColor = overlayHeader ? (Astro.props.theme === 'cinema-home' ? '#2820
       <div class="shell header-inner">
         <a class="wordmark" href={route()} aria-label="Jennings Li · 首页" lang="en">Jennings Li</a>
         <nav aria-label="主导航">
-          {navigation.map(item => <a href={item.href} aria-current={section === item.key ? 'page' : undefined}>{item.label}</a>)}
+          {navigation.map(item => <a href={item.href} lang={item.lang} data-nav-section={item.key} aria-current={section === item.key ? 'page' : undefined}>{item.label}</a>)}
         </nav>
       </div>
     </header>

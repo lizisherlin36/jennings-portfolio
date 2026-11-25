@@ -28,7 +28,7 @@ npm run dev
 | 作品、分集及原片链接 | `src/data/projects.ts` |
 | 视频、图片与封面元数据 | `src/data/media.json` |
 | 站内视频、图片与封面 | `public/media/` |
-| 首页与 AI Lab 首屏轮播 | `src/components/HeroReel.astro` |
+| 首页与 AI 影像首屏轮播 | `src/components/HeroReel.astro` |
 | GOOD LOOKS 图集与笔记链接 | `src/data/good-looks-media.json` 和 `src/data/good-looks.ts` |
 | 在线实验站 | `src/components/Experiments.astro` |
 | 个人介绍 | `src/pages/about/index.astro` |

@@ -2,11 +2,11 @@
 import Site from '../../layouts/Site.astro';
 import HeroReel from '../../components/HeroReel.astro';
 import WorkCard from '../../components/WorkCard.astro';
-import { projects, route } from '../../data/projects';
+import { categories, projects, route } from '../../data/projects';
 
 const work = projects.filter(project => project.category === 'motion');
 ---
-<Site theme="cinema-lab" overlayHeader title="AI Lab" section="lab" image={route('media/reels/mariana-hero.webp')}>
+<Site theme="cinema-lab" overlayHeader title={categories.motion} section="lab" image={route('media/reels/mariana-hero.webp')}>
   <HeroReel mode="lab" />
   <section class="shell section-space" id="ai-work">
     <div class="case-subhead"><h2>已制作的作品</h2></div>
